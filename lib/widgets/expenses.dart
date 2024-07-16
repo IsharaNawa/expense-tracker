@@ -27,6 +27,21 @@ class _ExpensesState extends State<Expenses> {
     ),
   ];
 
+  // this function shows a modal when the + button is pressed
+  void _openAddExpenseOverlay() {
+    // context and builder is required
+    // context is a global variable which is enabled by flutter inside a State class
+    // what is context : widget meta data managed by flutter(position of overall widget tree)
+    // builder must be provided with a function
+
+    // ctx is the context of the modal bottm sheet that was created
+    // context is the context of the _ExpensesState
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => Text("Modal Bottom Sheet"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // scaffold has a app bar official support
@@ -35,7 +50,7 @@ class _ExpensesState extends State<Expenses> {
         title: const Text("Flutter Expense Tracker"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _openAddExpenseOverlay,
             icon: const Icon(Icons.add),
           ),
         ],
