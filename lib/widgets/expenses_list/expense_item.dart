@@ -28,11 +28,11 @@ class ExpenseItem extends StatelessWidget {
                 const Spacer(), // spacer gets all the remaning space after other widget get their required length
                 Row(
                   children: [
-                    Icon(Icons.alarm),
+                    Icon(categoryIcons[expense.category]),
                     const SizedBox(
                       width: 8,
                     ),
-                    Text(expense.date.toString()),
+                    Text(expense.formattedDate),
                   ],
                 ),
               ],
