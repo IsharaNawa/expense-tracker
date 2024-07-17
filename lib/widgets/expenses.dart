@@ -46,6 +46,8 @@ class _ExpensesState extends State<Expenses> {
     // ctx is the context of the modal bottm sheet that was created
     // context is the context of the _ExpensesState
     showModalBottomSheet(
+      isScrollControlled: true,
+
       context: context,
 
       // call the new expense widget
