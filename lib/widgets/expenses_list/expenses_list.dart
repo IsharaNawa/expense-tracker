@@ -23,11 +23,17 @@ class ExpensesList extends StatelessWidget {
     // itemBuilder would be using the list and builds each item of the list
     return ListView.builder(
         itemCount: expeses.length,
-        itemBuilder: (ctx, index) => 
-        // we added the dismissable action to the expenses list
-        // so the users can swipe and dismiss the expenses item
-        Dismissible(
+        itemBuilder: (ctx, index) =>
+            // we added the dismissable action to the expenses list
+            // so the users can swipe and dismiss the expenses item
+            Dismissible(
               key: ValueKey(expeses[index]),
+              background: Container(
+                color: Theme.of(context).colorScheme.error.withOpacity(0.75),
+                margin: EdgeInsets.symmetric(
+                  horizontal: Theme.of(context).cardTheme.margin!.horizontal,
+                ),
+              ),
               onDismissed: (direction) =>
                   {deleteExpenseFromList(expeses[index])},
               child: ExpenseItem(expeses[index]),

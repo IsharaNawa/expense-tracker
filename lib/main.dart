@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // creating the color scheme
 // from seed method would create a different fades of one color
 var kColorScheme =
-    ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 96, 59, 181));
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
 
 void main() {
   runApp(
