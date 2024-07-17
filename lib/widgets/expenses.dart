@@ -39,9 +39,34 @@ class _ExpensesState extends State<Expenses> {
   // this function executes when the user wants to delete the expense item by swiping it
   // this is bind to the button in the modal
   void _deleteExpenseFromList(Expense expense) {
+    // first get the index of the item about to be deleted
+    final int deletedIndex = _registeredExpenses.indexOf(expense);
+
+    // delete the item
     setState(() {
       _registeredExpenses.remove(expense);
     });
+
+    // clear any existing snackbars
+    ScaffoldMessenger.of(context).clearSnackBars();
+
+    // allowing the user to unde the deletion
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      // create the duration for undo message
+      duration: const Duration(seconds: 15),
+
+      // main text
+      content: const Text("Expense Deleted!"),
+
+      // create the action
+      action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(deletedIndex, expense);
+            });
+          }),
+    ));
   }
 
   // this function shows a modal when the + button is pressed
@@ -83,10 +108,12 @@ class _ExpensesState extends State<Expenses> {
           // why do we use Expanded here ? Because column(or column like widget) inside a
           // column does not rendered accurately
           Expanded(
-            child: ExpensesList(
-              expeses: _registeredExpenses,
-              deleteExpenseFromList: _deleteExpenseFromList,
-            ),
+            child: _registeredExpenses.isEmpty
+                ? const Center(child: Text("No Expenses! Please add some."))
+                : ExpensesList(
+                    expeses: _registeredExpenses,
+                    deleteExpenseFromList: _deleteExpenseFromList,
+                  ),
           ),
         ],
       ),
