@@ -4,7 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense(this.addNewExpenseToList, {super.key});
+
+  // this function handles the binding mechanism
+  final void Function(Expense expense) addNewExpenseToList;
 
   @override
   State<NewExpense> createState() {
@@ -16,6 +19,7 @@ class _NewExpenseState extends State<NewExpense> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   DateTime? _selectedDate;
+  Category _selectedCategory = Category.leisure;
 
   // dispose must be called on every controller otherwise memeory would not be released
   @override
@@ -23,6 +27,47 @@ class _NewExpenseState extends State<NewExpense> {
     titleController.dispose();
     amountController.dispose();
     super.dispose();
+  }
+
+  void _submitExpenseData() {
+    final double? amount = double.tryParse(amountController.text);
+    final bool amountIsInvalid = amount == null || amount <= 0;
+
+    if (titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // open a dialog box
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text("Invalid Input!"),
+                content: const Text(
+                    "Please make sure a valid title, amount , date and category was enetered!"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text("OK"),
+                  )
+                ],
+              ));
+      return;
+    }
+
+    // when a valid expense is found
+    // create a new expense
+    Expense submittedExpense = Expense(
+        title: titleController.text.trim(),
+        amount: amount,
+        date: _selectedDate!,
+        category: _selectedCategory);
+
+    // call the add method in the expenses file
+    widget.addNewExpenseToList(submittedExpense);
+
+    // and pop out the model
+    Navigator.pop(context);
   }
 
   // add the date picker
@@ -99,8 +144,30 @@ class _NewExpenseState extends State<NewExpense> {
               ),
             ],
           ),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
+              // drop down button has two essential buttons
+              // drop down button does not support controller
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map((category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category.name.toUpperCase())))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    if (value == null) {
+                      return;
+                    }
+                    _selectedCategory = value;
+                  });
+                },
+              ),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   // we should use the Navigator to the original screen
@@ -110,10 +177,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: Text("Cancel"),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print(titleController.text);
-                  print(amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text("Save Expense"),
               ),
             ],

@@ -28,6 +28,14 @@ class _ExpensesState extends State<Expenses> {
     ),
   ];
 
+  // this function executes when the user wants to add a new expense to the list
+  // this is bind to the button in the modal
+  void _addNewExpenseToList(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
+  }
+
   // this function shows a modal when the + button is pressed
   void _openAddExpenseOverlay() {
     // context and builder is required
@@ -39,7 +47,9 @@ class _ExpensesState extends State<Expenses> {
     // context is the context of the _ExpensesState
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => const NewExpense(),
+
+      // call the new expense widget
+      builder: (ctx) => NewExpense(_addNewExpenseToList),
     );
   }
 
