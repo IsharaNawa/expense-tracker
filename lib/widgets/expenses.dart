@@ -36,6 +36,14 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  // this function executes when the user wants to delete the expense item by swiping it
+  // this is bind to the button in the modal
+  void _deleteExpenseFromList(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+  }
+
   // this function shows a modal when the + button is pressed
   void _openAddExpenseOverlay() {
     // context and builder is required
@@ -77,6 +85,7 @@ class _ExpensesState extends State<Expenses> {
           Expanded(
             child: ExpensesList(
               expeses: _registeredExpenses,
+              deleteExpenseFromList: _deleteExpenseFromList,
             ),
           ),
         ],

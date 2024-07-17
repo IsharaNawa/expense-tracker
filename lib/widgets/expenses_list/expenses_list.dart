@@ -3,9 +3,11 @@ import 'package:expense_tracker/widgets/expenses_list/expense_item.dart';
 import 'package:flutter/material.dart';
 
 class ExpensesList extends StatelessWidget {
-  const ExpensesList({super.key, required this.expeses});
+  const ExpensesList(
+      {super.key, required this.expeses, required this.deleteExpenseFromList});
 
   final List<Expense> expeses;
+  final void Function(Expense expense) deleteExpenseFromList;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,15 @@ class ExpensesList extends StatelessWidget {
 
     // itemBuilder would be using the list and builds each item of the list
     return ListView.builder(
-      itemCount: expeses.length,
-      itemBuilder: (ctx, index) => ExpenseItem(expeses[index]),
-    );
+        itemCount: expeses.length,
+        itemBuilder: (ctx, index) => 
+        // we added the dismissable action to the expenses list
+        // so the users can swipe and dismiss the expenses item
+        Dismissible(
+              key: ValueKey(expeses[index]),
+              onDismissed: (direction) =>
+                  {deleteExpenseFromList(expeses[index])},
+              child: ExpenseItem(expeses[index]),
+            ));
   }
 }
