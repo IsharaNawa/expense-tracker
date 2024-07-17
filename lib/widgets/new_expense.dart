@@ -1,7 +1,5 @@
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense(this.addNewExpenseToList, {super.key});
@@ -174,7 +172,7 @@ class _NewExpenseState extends State<NewExpense> {
                   // this would disappear the modal overlay
                   Navigator.pop(context);
                 },
-                child: Text("Cancel"),
+                child: const Text("Cancel"),
               ),
               ElevatedButton(
                 onPressed: _submitExpenseData,
